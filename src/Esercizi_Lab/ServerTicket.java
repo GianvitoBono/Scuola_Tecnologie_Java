@@ -1,25 +1,23 @@
+package Esercizi_Lab;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
-import java.net.InetAddress;
+import java.net.ServerSocket;
 import java.net.Socket;
 
-public class ClientTicket {
+public class ServerTicket {
 
+	private ServerSocket serverSocket;
 	private Socket socket;
 	private BufferedReader in;
 	private PrintWriter out;
 
-	public Socket connect() {
-		try {
-			socket = new Socket(InetAddress.getLocalHost(), 4444);
-			return socket;
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-			return null;
-		}
+	public void listen() throws IOException {
+		serverSocket = new ServerSocket(4444);
+		socket = serverSocket.accept();
+		serverSocket.close();
+		System.out.println("[+] Client connesso al server");
 	}
 
 	public String receive() {
@@ -53,18 +51,27 @@ public class ClientTicket {
 			return false;
 		}
 	}
-
+	
 	public static void main(String[] args) {
-		ClientTicket c = new ClientTicket();
-		c.connect();
-		String str;
-		do {
-			str = c.receive();
-			if (!str.equals("."))
-				System.out.println("[+] Risposta ricevuta: " + str);
-		} while (str != null && !str.equals("."));
-		c.close();
-		System.out.println("[+] Connessione col server chiusa");
+		try {
+			System.out.println("[+] Creo il server");
+			ServerTicket s = new ServerTicket();
+			System.out.println("[+] Server creato");
+			s.listen();
+			int i = 0;
+			while (!s.receive().equals(".")) {
+				System.out.println("[+] Invio " + i++);
+				s.send(String.valueOf(i++));
+			}			
+			
+			s.close();
+			System.out.println("[+] Connessione col client chiusa");
+
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 
 	}
+
 }
