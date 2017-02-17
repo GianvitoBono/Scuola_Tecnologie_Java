@@ -2,7 +2,6 @@ package Esercizi_Lab;
 
 import java.io.IOException;
 import java.net.ServerSocket;
-import java.util.ArrayList;
 
 /*
  *
@@ -12,16 +11,18 @@ import java.util.ArrayList;
 public class ServerMultiThread {
 
 	private ServerSocket serverSocket;
-	public ArrayList<String> sharedPool;
+	private int port;
 	
 	public ServerMultiThread(int port) throws IOException {
+		this.port = port;
 		serverSocket = new ServerSocket(port);
 	}
 
 	public void listen() {
 		try {
 			while (true) {
-				new ServerThread(serverSocket.accept(), sharedPool).start();
+				System.out.println("Server in attesa sulla porta " + port);
+				new ServerThread(serverSocket.accept()).start();
 				System.out.println("[+] Client connesso");
 			}
 		} catch (IOException e) {

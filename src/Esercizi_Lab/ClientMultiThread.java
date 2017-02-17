@@ -65,10 +65,8 @@ public class ClientMultiThread {
 				System.out.println("[+] Invio un messaggio");
 				c.send(new BufferedReader(new InputStreamReader(System.in)).readLine());
 				str = c.receive();
-				if (!str.equals("."))
-					System.out.println("[+] Risposta ricevuta: " + str);
-			} while (str != null && !str.equals("."));
-			c.close();
+				System.out.println();
+			} while (!str.equals("."));
 			System.out.println("[+] Connessione col server chiusa");
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
